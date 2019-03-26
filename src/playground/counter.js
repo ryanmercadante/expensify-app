@@ -1,3 +1,4 @@
+
 class Counter extends React.Component {
   constructor(props) {
     super(props)
@@ -9,6 +10,26 @@ class Counter extends React.Component {
       count: 0
     }
   }
+
+  componentDidMount() {
+    try {
+      const json = localStorage.getItem('count')
+      const count = JSON.parse(json)
+      if (!isNaN(count)) {
+        this.setState(() => ({ count }))
+      }
+    } catch(e) {
+      // do nothing
+    }
+  }
+
+  componentDidUpdate(prevState) {
+    if (prevState.count !== this.state.count) {
+      const json = JSON.stringify(this.state.count)
+      localStorage.setItem('count', json)
+    }
+  }
+
   handleAddOne() {
     this.setState((prevState) => {
       return {
